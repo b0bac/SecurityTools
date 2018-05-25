@@ -96,7 +96,7 @@ def GetSuspiciousPage(accessModel):
     for index,item in enumerate(resultlist):
         if int(index) > 10 or item["ipcount"] > WebShellScanAccessIPCount or item["accesscount"] > WebShellScanAccessCount:
             break
-        print "页面:%s"%item["page"],"可疑原因:访问率低"
+        print "可疑页面:%s"%item["page"],"可疑原因:访问率低"
 
 
 def WebShellScan(filename):
