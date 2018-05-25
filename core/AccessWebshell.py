@@ -6,8 +6,66 @@ from AccessApi import *
 sys.path.append("../")
 from settings.settings import *
 
+
+keywords = [
+    "ghost",
+    "gh0st",
+    "=eval",
+    "evil",
+    "asp;",
+    "php;",
+    "jsp;",
+    "aspx;",
+    "jspx;",
+    "php3;",
+    "php4;",
+    "php5;",
+    ".asp/",
+    ".aspx/",
+    ".jsp/",
+    ".jspx/",
+    ".php/",
+    "jpg/",
+    "jpeg/",
+    "png/",
+    "php%00",
+    "asp%00",
+    "jsp%00",
+    "aspx%00",
+    "jspx%00",
+    "php ",
+    "asp ",
+    "jsp ",
+    "aspx ",
+    "jspx ",
+    ".txt/",
+    "=system(",
+    ".jsp.",
+    ".php.",
+    ".php3.",
+    ".php4.",
+    ".php5.",
+    ".jspx.",
+    ".asp.",
+    ".aspx.",
+    "cmd",
+    "phpinfo",
+    "=whoami",
+    "=id",
+    "=bash",
+    "=ls",
+
+]
+
+def KeywordCheck(string):
+    for word in keywords:
+        if word in string.lower():
+            return (True,word)
+    return (False,None)
+
 def GetPageAccessModel(filename):
     accessModel = {}
+    keywordPage = []
     with open(filename,'r') as fr:
         while True:
             line = fr.readline()
@@ -15,13 +73,16 @@ def GetPageAccessModel(filename):
             if line in ["","\r\n",'\n',None]:
                 break
             accesspage= informationlist[6]
+            ret = KeywordCheck(accesspage)
+            if ret[0]:
+                keywordPage.append((accesspage,ret[1]))
             if accesspage not in accessModel:
                 accessModel[accesspage] = {}
             ip = informationlist[0]
             if ip not in accessModel:
                 accessModel[accesspage][ip] = 1
             accessModel[accesspage][ip] += 1
-    return accessModel
+    return accessModel,keywordPage
 
 def GetSuspiciousPage(accessModel):
     PageAccessModel = []
@@ -33,11 +94,13 @@ def GetSuspiciousPage(accessModel):
         PageAccessModel.append({"page":key,"ipcount":ipcount,"accesscount":accesscount})
     resultlist = sorted(PageAccessModel ,key = lambda x:(x['ipcount'],x['accesscount']),reverse=False)
     for index,item in enumerate(resultlist):
-        if index > 49 or item["ipcount"] > WebShellScanAccessIPCount or item["accesscount"] > WebShellScanAccessCount:
+        if int(index) > 10 or item["ipcount"] > WebShellScanAccessIPCount or item["accesscount"] > WebShellScanAccessCount:
             break
-        print "可疑排序:%s  页面:%s  访问IP地址数量:%s  访问总次数:%s"%((index+1),item["page"],str(item["ipcount"]),str(item["accesscount"]))
+        print "页面:%s"%item["page"],"可疑原因:访问率低"
 
 
 def WebShellScan(filename):
-    ret = GetPageAccessModel(filename)
-    GetSuspiciousPage(ret)
+    ret1,ret2 = GetPageAccessModel(filename)
+    for page in ret2:
+        print "可疑页面:",page[0]," 可疑原因:",page[1]
+    GetSuspiciousPage(ret1)
