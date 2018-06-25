@@ -3,9 +3,9 @@
 import os
 from AccessApi import *
 
-def GetAccessIPList(filename):
+def GetAccessIPList(filename,ipflag='1'):
     AccessListIP = {}
-    command = "cat %s | awk '{print $1}' | sort -r | uniq -c | sort -r"%filename
+    command = "cat %s | awk '{print $%s}' | sort -r | uniq -c | sort -r"%(filename,ipflag)
     result = os.popen(command)
     for line in result.read().split('\n'):
         line =  line.lstrip()
@@ -26,10 +26,10 @@ def GetAccessIPList(filename):
 
 
 
-def GetAccessIPListByTime(filename,accesstime,timezone=None):
+def GetAccessIPListByTime(filename,accesstime,ipflag='1',timezone=None):
     AccessListIP = {}
     accesstime = TimeFormat(accesstime,timezone)
-    command = "cat %s | grep '%s' | awk '{print $1}'  | sort -r | uniq -c | sort -r"%(filename,accesstime)
+    command = "cat %s | grep '%s' | awk '{print $%s}'  | sort -r | uniq -c | sort -r"%(filename,accesstime,ipflag)
     result = os.popen(command).read()
     for line in result.split('\n'):
         line =  line.lstrip()
@@ -50,10 +50,10 @@ def GetAccessIPListByTime(filename,accesstime,timezone=None):
         for ip in AccessListIP[value]:
             print "排名:%s 访问源地址:%s 访问次数:%s"%(index+1,ip,value)
 
-def GetAccessIPListByDate(filename,date):
+def GetAccessIPListByDate(filename,date,ipflag='1'):
     AccessListIP = {}
     accesstime = TimeFormat(date).split(":")[0]
-    command = "cat %s | grep '%s' | awk '{print $1}'  | sort -r | uniq -c | sort -r"%(filename,accesstime)
+    command = "cat %s | grep '%s' | awk '{print $%s}'  | sort -r | uniq -c | sort -r"%(filename,accesstime,ipflag)
     result = os.popen(command).read()
     if result == '':
         return

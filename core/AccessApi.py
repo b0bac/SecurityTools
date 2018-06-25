@@ -8,16 +8,16 @@ AccessLogFileList = []
 def GetWorkPath():
     return str(os.getcwd())+'/'
 
-def GetAllAccessLogFile(filepath=None):
+def GetAllAccessLogFile(filepath=None,filename="access"):
     global AccessLogFileList
     if filepath == None:
         rootdir = GetWorkPath()
     else:
         rootdir = filepath
     for parents,dirs,filenames in os.walk(rootdir):
-        for filename in filenames:
-            if "access" in filename.lower() and 'py' not in filename:
-                AccessLogFileList.append(rootdir+filename)
+        for logfilename in filenames:
+            if filename in logfilename.lower() and 'py' not in logfilename:
+                AccessLogFileList.append(rootdir+logfilename)
 
 def TimeFormat(accesstime,timezone=None):
     monthlist = {"01":"Jan","02":"Feb","03":"Mar","04":"Apr","05":"May","06":"Jun","07":"Jul","08":"Aug","09":"Sep","10":"Oct","11":"Nov","12":"Dec"}
