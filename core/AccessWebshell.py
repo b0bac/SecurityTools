@@ -54,6 +54,7 @@ keywords = [
     "=id",
     "=bash",
     "=ls",
+    "..",
 
 ]
 
