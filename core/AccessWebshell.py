@@ -55,6 +55,8 @@ keywords = [
     "=bash",
     "=ls",
     "..",
+    "s=/index/\think",
+    "call_user_func_array",
 
 ]
 
