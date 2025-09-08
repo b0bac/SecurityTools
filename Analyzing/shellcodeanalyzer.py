@@ -137,9 +137,9 @@ def get_string_from_shellcode(shellcode) -> None:
     if len(current_str) >= 4:
         ascii_strings.append(current_str)
     for strings in list(set(ascii_strings)):
-        if re.match(ip_pattern, strings):
+        if re.search(ip_pattern, strings):
             print("  [*] 字符串%s  %s [发现IP地址]" % (str(index_number), str(strings)))
-        elif re.match(url_pattern, strings):
+        elif re.search(url_pattern, strings):
             print("  [*] 字符串%s  %s [发现URL]" % (str(index_number), str(strings)))
         else:
             print("  [*] 字符串%s  %s" % (str(index_number), str(strings)))
