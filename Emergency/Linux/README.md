@@ -8,6 +8,12 @@ sh ./install.sh
 ```
 
 要求root权限
+# 查看用户态隐藏进程
+***
+```sh
+chmod +x ProcessHiddenCheck.sh
+./ProcessHiddenCheck.sh
+```
 
 # 查看操作系统信息：
 ***
